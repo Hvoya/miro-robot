@@ -1,0 +1,71 @@
+ERROR  : 12:25:34: Ошибка: Error connecting to the server: FATAL:  password authentication failed for user "postgres"
+FATAL:  password authentication failed for user "postgres"
+
+ERROR  : 13:06:39: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:06:43: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:06:46: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:06:48: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:07:18: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:07:29: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 13:57:46: Ошибка: ERROR:  duplicate key value violates unique constraint "salesmans_pkey"
+DETAIL:  Key (id)=(5) already exists.
+ERROR  : 15:20:16: Ошибка: ERROR:  column "nqzuveq8j9" does not exist
+ERROR  : 15:20:27: Ошибка: ERROR:  column "nqzuveq8j9" does not exist
+ERROR  : 15:20:34: Ошибка: ERROR:  operator does not exist: character varying > integer
+ERROR  : 15:21:56: Ошибка: ERROR:  date/time field value out of range: "3413412343"
+LINE 1: UPDATE public.coupons SET activate_date='3413412343'::timest...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:05: Ошибка: ERROR:  date/time field value out of range: "3412343"
+LINE 1: UPDATE public.coupons SET activate_date='3412343'::timestamp...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:17: Ошибка: ERROR:  date/time field value out of range: "3412343"
+LINE 1: UPDATE public.coupons SET activate_date='3412343'::timestamp...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:22: Ошибка: ERROR:  date/time field value out of range: "34123434"
+LINE 1: UPDATE public.coupons SET activate_date='34123434'::timestam...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:29: Ошибка: ERROR:  date/time field value out of range: "341234344"
+LINE 1: UPDATE public.coupons SET activate_date='341234344'::timesta...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:35: Ошибка: ERROR:  date/time field value out of range: "3412343445"
+LINE 1: UPDATE public.coupons SET activate_date='3412343445'::timest...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:45: Ошибка: ERROR:  date/time field value out of range: "5555555555"
+LINE 1: UPDATE public.coupons SET activate_date='5555555555'::timest...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:22:54: Ошибка: ERROR:  date/time field value out of range: "55555555551564106935378"
+LINE 1: UPDATE public.coupons SET activate_date='5555555555156410693...
+                                                ^
+ERROR  : 15:23:10: Ошибка: ERROR:  date/time field value out of range: "1564106935378"
+LINE 1: UPDATE public.coupons SET activate_date='1564106935378'::tim...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:23:14: Ошибка: ERROR:  date/time field value out of range: "1564106935378"
+LINE 1: UPDATE public.coupons SET activate_date='1564106935378'::tim...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 15:23:22: Ошибка: ERROR:  date/time field value out of range: "1564106935378"
+LINE 1: UPDATE public.coupons SET activate_date='1564106935378'::tim...
+                                                ^
+HINT:  Perhaps you need a different "datestyle" setting.
+ERROR  : 09:18:31: Ошибка: ERROR:  permission denied for relation users
+ERROR  : 09:18:39: Ошибка: ERROR:  permission denied for relation tokens
+ERROR  : 09:19:18: Ошибка: Error connecting to the server: could not parse network address "f": Неизвестное имя или служба
+
+ERROR  : 09:19:52: Ошибка: ERROR:  permission denied for relation users
+ERROR  : 10:03:23: Ошибка: ERROR:  permission denied for relation images
+ERROR  : 10:03:27: Ошибка: ERROR:  permission denied for relation images
+ERROR  : 10:03:53: Ошибка: ERROR:  permission denied for relation schemaversion
