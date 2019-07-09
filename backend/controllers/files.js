@@ -28,8 +28,22 @@ const uploadFile = async (req, res) => {
   }
 }
 
+const downloadFile = async (req, res) => {
+  try {
+    const fileObject = await DB.File.findByPk(req.params.id);
+    const file = process.env.STORE_PATH + '/files/' + fileObject.name;
+
+    return res.download(file, fileObject.original_name);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error })
+  }
+}
+
 const connect = app => {
   app.post('/files', uploadFile);
+  app.get('/files/:id', downloadFile)
 }
 
 module.exports = {

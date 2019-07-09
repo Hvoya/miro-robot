@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    view: {
+    views: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },

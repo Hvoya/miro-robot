@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     avatar: DataTypes.BOOLEAN,
     project_id: DataTypes.INTEGER,
+    user_id: DataTypes.BIGINT,
     created_at: {
       type: DataTypes.DATE,
       defaultValue: () => new Date(),

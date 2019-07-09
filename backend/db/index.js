@@ -16,15 +16,18 @@ const Project = require("./models/project")(sequelize, Sequelize);
 const Image = require("./models/image")(sequelize, Sequelize);
 const File = require("./models/file")(sequelize, Sequelize);
 
-User.hasMany(Project);
+User.hasMany(Project, { foreignKey: 'user_id', targetKey: 'id' });
+User.hasOne(Image, { foreignKey: 'user_id', targetKey: 'id' });
 
-Project.hasMany(Image);
-Project.hasMany(File);
-Project.belongsTo(User);
+Project.hasMany(Image, { foreignKey: 'project_id', targetKey: 'id' });
+Image.hasOne(Project, { foreignKey: 'main_image_id', as: 'MainImage' });
+Project.hasMany(File, { foreignKey: 'project_id', targetKey: 'id' });
+Project.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id' });
 
-Image.belongsTo(Project);
+Image.belongsTo(Project, { foreignKey: 'project_id', targetKey: 'id' });
+Image.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id' });
 
-File.belongsTo(Project);
+File.belongsTo(Project, { foreignKey: 'project_id', targetKey: 'id' });
 
 module.exports = {
   User,

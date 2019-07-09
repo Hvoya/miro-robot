@@ -14,7 +14,6 @@ const login = async (req, res) => {
     const accepted = await bcrypt.compare(data.password, user.password);
 
     if (!accepted) return res.status(404).send({ error: 'wrong password' });
-
     const payload = {
       id: user.id,
       role: user.role,
@@ -25,6 +24,7 @@ const login = async (req, res) => {
     }
 
     const token = await jwt.sign(payload, process.env.SECRET_KEY);
+    console.log(token)
 
     return res.send({ token })
   } catch (error) {
