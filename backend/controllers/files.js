@@ -1,6 +1,7 @@
 const DB = require('../db');
 const formidable = require('formidable');
 const RandExp = require('randexp');
+const fs = require('fs');
 
 const uploadFile = async (req, res) => {
   try {
@@ -39,9 +40,24 @@ const downloadFile = async (req, res) => {
     console.error(error);
     return res.status(500).send({ error })
   }
-}
+};
+
+const deleteFile = async (req, res) => {
+  try {
+    const { file_id } = req.params;
+    const file = await DB.File.findByPk(file_id);
+    fs.unlink(process.env.STORE_PATH + '/files/' + file.name, ()=>{});
+    await file.destroy();
+    res.send({status: 0})
+
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send({ error: error.message });
+  }
+};
 
 const connect = app => {
+  app.delete('/files/:file_id', deleteFile);
   app.post('/files', uploadFile);
   app.get('/files/:id', downloadFile)
 }

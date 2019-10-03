@@ -1,5 +1,8 @@
-const DB = require('../db');
-const { varifyUser } = require('../authMiddleware');
+const Op = require("sequelize").Op;
+
+const DB = require("../db");
+const { varifyUser } = require("../authMiddleware");
+const { deleteImage } = require('../dal/images')
 
 const createProject = async (req, res) => {
   try {
@@ -13,7 +16,7 @@ const createProject = async (req, res) => {
       main_image_id: data.main_image_id
     });
     data.images.forEach(async imageId => {
-      console.log(imageId)
+      console.log(imageId);
       const image = await DB.Image.findByPk(imageId);
       image.project_id = project.id;
       image.save();
@@ -24,12 +27,12 @@ const createProject = async (req, res) => {
       file.save();
     });
 
-    return res.send({ data: project })
+    return res.send({ data: project });
   } catch (error) {
-    console.error(error)
-    return res.status(500).send({ error })
+    console.error(error);
+    return res.status(500).send({ error });
   }
-}
+};
 
 const getProjectList = async (req, res) => {
   try {
@@ -53,7 +56,15 @@ const getProjectList = async (req, res) => {
     if (filters.user_id) {
       where.push({
         user_id: filters.user_id
-      })
+      });
+    }
+
+    if (filters.search) {
+      where.push({
+        name: {
+          [Op.iLike]: "%" + filters.search + "%"
+        }
+      });
     }
 
     const projects = await DB.Project.findAndCountAll({
@@ -62,30 +73,32 @@ const getProjectList = async (req, res) => {
       limit: pageSize,
       offset: pageSize * page,
       order,
-      include: [{
-        model: DB.User,
-        attributes: ['id', 'username']
-      },
-      {
-        model: DB.Image,
-        attributes: ['name'],
-        // as: 'MainImage'
-      }
+      include: [
+        {
+          model: DB.User,
+          attributes: ["id", "username"]
+        },
+        {
+          model: DB.Image,
+          attributes: ["name"]
+          // as: 'MainImage'
+        }
       ]
     });
 
     return res.send({
-      data: projects.rows, pagination: {
+      data: projects.rows,
+      pagination: {
         total: projects.count,
-        pageSize
-      },
-    })
-
+        pageSize,
+        current: page
+      }
+    });
   } catch (error) {
-    console.error(error)
-    return res.status(500).send({ error })
+    console.error(error);
+    return res.status(500).send({ error });
   }
-}
+};
 
 const getProject = async (req, res) => {
   try {
@@ -93,39 +106,112 @@ const getProject = async (req, res) => {
       include: [
         {
           model: DB.Image,
-          attributes: ['name']
-        }, {
+          attributes: ["name", "id"]
+        },
+        {
           model: DB.File,
-          attributes: ['id', 'original_name']
+          attributes: ["id", "original_name"]
         },
         {
           model: DB.User,
-          attributes: ['id', 'username', 'first_name', 'last_name'],
+          attributes: ["id", "username", "first_name", "last_name"],
           include: {
             model: DB.Image,
-            attributes: ['name']
+            attributes: ["id", "name",]
           }
         },
+        {
+          model: DB.Comment,
+          include: {
+            model: DB.User,
+            include: DB.Image
+          }
+        }
       ]
     });
     project.views = project.views + 1;
     project.save();
-    if (!project) return res.status(404).send('not found');
+    if (!project) return res.status(404).send("not found");
 
-    return res.send({ data: project })
+    const user_id = req.query.user_id;
+    if (!user_id) return res.send({ data: project });
+
+    const like = await DB.Like.findOne({
+      where: {
+        user_id: user_id,
+        project_id: req.params.id
+      }
+    });
+
+    if (like) {
+      project.dataValues.liked = true;
+    } else {
+      project.dataValues.liked = false;
+    }
+
+    return res.send({ data: project });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error });
+  }
+};
+
+const deleteProject = async (req, res) => {
+  try {
+    const { user } = res.locals;
+    if (user.role !== 0) return res.status(403).send({ error: "Forbidden" });
+
+    const images = await DB.Image.findAll({where: {project_id: req.params.id}});
+
+    for(let image of images){
+    	await deleteImage(image.id);
+		}
+
+    const project = await DB.Project.findByPk(req.params.id);
+    await project.destroy();
+
+    return res.send({ status: 0 });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error });
+  }
+};
+const updateProject = async (req, res) => {
+  try {
+    const updatedValues = req.body;
+    const { project_id } = req.params;
+    const { user: { id : user_id, role } } = res.locals;
+    const project = await DB.Project.findByPk(project_id, { include: DB.User });
+    if (project.user.id !== user_id && role !== 0) return res.status(403).send({ error: 'Forbidden'});
+    const updatedProject = await project.update(updatedValues);
+
+    await updatedValues.images.forEach(async imageId => {
+      const image = await DB.Image.findByPk(imageId);
+      image.project_id = project.id;
+      image.save();
+    });
+    await updatedValues.files.forEach(async fileId => {
+      const file = await DB.File.findByPk(fileId);
+      file.project_id = project.id;
+      file.save();
+    });
+
+    return res.send({data: updatedProject});
 
   } catch (error) {
-    console.error(error)
-    return res.status(500).send({ error })
+    console.error(error);
+    return res.status(500).send({ error: error.message });
   }
-}
+};
 
 const connect = app => {
-  app.post('/projects', varifyUser, createProject);
-  app.get('/projects', getProjectList);
-  app.get('/projects/:id', getProject);
-}
+  app.put("/projects/:project_id", varifyUser, updateProject);
+  app.delete("/projects/:id", varifyUser, deleteProject);
+  app.post("/projects", varifyUser, createProject);
+  app.get("/projects", getProjectList);
+  app.get("/projects/:id", getProject);
+};
 
 module.exports = {
   connect
-}
+};

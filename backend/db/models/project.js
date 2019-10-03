@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     description: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
+    comment_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    like_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: () => new Date(),

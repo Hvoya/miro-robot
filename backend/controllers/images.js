@@ -1,6 +1,7 @@
 const DB = require('../db');
 const formidable = require('formidable');
 const RandExp = require('randexp');
+const fs = require('fs');
 
 const uploadImage = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ const uploadImage = async (req, res) => {
         original_name: file.name,
         type,
         avatar: false
-      })
+      });
       return res.send({ data: image })
     });
 
@@ -27,12 +28,27 @@ const uploadImage = async (req, res) => {
     console.error(error);
     return res.status(500).send({ error })
   }
-}
+};
+
+const deleteImage = async (req, res) => {
+  try {
+    const { image_id } = req.params;
+    const image = await DB.Image.findByPk(image_id);
+    fs.unlink(process.env.STORE_PATH + '/images/' + image.name, ()=>{});
+    await image.destroy();
+    res.send({status: 0})
+
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send({ error: error.message });
+  }
+};
 
 const connect = app => {
   app.post('/images', uploadImage);
-}
+  app.delete('/images/:image_id', deleteImage);
+};
 
 module.exports = {
   connect
-}
+};

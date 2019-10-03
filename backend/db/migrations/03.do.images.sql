@@ -9,5 +9,5 @@ CREATE TABLE public.images (
    created_at timestamp with time zone NOT NULL default CURRENT_TIMESTAMP,
    updated_at timestamp with time zone NOT NULL default CURRENT_TIMESTAMP,
    PRIMARY KEY (id),
-   FOREIGN KEY (project_id) references public.projects(id)
+   FOREIGN KEY (project_id) references public.projects(id) on delete cascade
 ) WITH (OIDS = FALSE);
