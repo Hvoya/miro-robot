@@ -225,11 +225,14 @@ export default {
       comment: "",
       user: this.$store.state.user,
       no_data_link: no_data,
-      project: {},
+      project: {
+        images: []
+      },
       server_address: SERVER_ADDRESS
     };
   },
   mounted() {
+    if(!this.user) this.user = {}
     xhr
       .get(
         `/projects/${this.$route.params.id}${
