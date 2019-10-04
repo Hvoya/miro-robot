@@ -161,7 +161,7 @@
                   <p v-html="comment.message"></p>
                   <a-button
                     @click="()=>deleteComment(comment.id)"
-                    v-if="$store.state.isAdmin || $store.state.user.id === comment.user.id"
+                    v-if="$store.state.isAdmin || ($store.state.user && $store.state.user.id === comment.user.id)"
                     type="danger"
                     :style="{alignSelf: 'flex-end'}"
                   >Удалить</a-button>
@@ -169,7 +169,7 @@
                 <a-tooltip
                   slot="datetime"
                   :title="moment(comment.created_at).format('YYYY-MM-DD HH:mm:ss')"
-                >
+                >`
                   <span>{{moment(comment.created_at).fromNow()}}</span>
                 </a-tooltip>
               </a-comment>
@@ -226,7 +226,10 @@ export default {
       user: this.$store.state.user,
       no_data_link: no_data,
       project: {
-        images: []
+        images: [],
+        files: [],
+        user: {},
+        comments: []
       },
       server_address: SERVER_ADDRESS
     };
