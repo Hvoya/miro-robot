@@ -162,7 +162,7 @@ export default {
           .then(() => {
             this.$message.destroy();
             this.$message.success(this.$t('success.activation_link_sent'));
-            // this.$router.replace("/projects/login");
+            this.$router.replace("/projects/login");
           });
       });
     },
