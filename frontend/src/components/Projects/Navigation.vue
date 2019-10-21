@@ -117,8 +117,8 @@ export default {
       if(path.includes('opportunities')) return 'opportunities';
       if(path.includes('projects/users/me')) return 'my';
       if(path.includes('projects/new')) return 'create-project';
+      if(path.includes('buy')) return 'buy';
       if(path.includes('projects')) return 'projects';
-
     }
   },
   methods: {

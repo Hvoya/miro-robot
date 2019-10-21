@@ -2,7 +2,7 @@ export default {
   about: "About",
   opportunities: "Opportunities",
   resources: "Resources",
-  all_projects: "Projects",
+  all_projects: "All projects",
   create_project: "Publish project",
   login: "Log In",
   logout: "Log Out",
